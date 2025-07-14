@@ -1,8 +1,0 @@
-<use name="DataFormats/PatCandidates"/>
-<use name="FWCore/Framework"/>
-<use name="FWCore/ParameterSet"/>
-<use name="FWCore/Utilities"/>
-<use name="RecoMET/METAlgorithms"/>
-<use name="HHKinFit2/HHKinFit2Scenarios"/>
-<use name="root"/>
-<flags EDM_PLUGIN="1"/>
