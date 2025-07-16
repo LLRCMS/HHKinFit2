@@ -33,7 +33,8 @@ HHKinFit2::HHKinFitMasterHeavyHiggs::HHKinFitMasterHeavyHiggs(TLorentzVector con
                                                               double sigmaEbjet1,
                                                               double sigmaEbjet2,
                                                               bool istruth, 
-                                                              TLorentzVector const&  heavyhiggsgen)
+                                                              TLorentzVector const& heavyhiggsgen,
+                                                              int verbosity)
   :m_MET_COV(TMatrixD(4,4)), m_bjet1_COV(TMatrixD(4,4)), m_bjet2_COV(TMatrixD(4,4))
 {
   m_bjet1 = HHLorentzVector(bjet1.Px(), bjet1.Py(), 
@@ -201,6 +202,9 @@ HHKinFit2::HHKinFitMasterHeavyHiggs::HHKinFitMasterHeavyHiggs(TLorentzVector con
     //m_MET_COV = recoil_COV + bjet1Cov + bjet2Cov;
     m_MET_COV = recoil_COV;
   }  
+
+  // verbosity
+  m_verbosity = verbosity;
 }
 
 
@@ -258,9 +262,12 @@ void HHKinFit2::HHKinFitMasterHeavyHiggs::fit()
     }
     catch(HHLimitSettingException const& e)
     {
-      std::cout << "Exception while setting tau limits:" << std::endl;
-      std::cout << e.what() << std::endl;
-      std::cout << "Tau energies are not compatible with invariant mass constraint." << std::endl;
+      if (m_verbosity >=1)
+      {
+        std::cout << "Exception while setting tau limits:" << std::endl;
+        std::cout << e.what() << std::endl;
+        std::cout << "Tau energies are not compatible with invariant mass constraint." << std::endl;
+      }
 
       m_map_chi2[m_hypos[i]] = -pow(10,10);
       m_map_prob[m_hypos[i]] = -pow(10,10);
@@ -1087,6 +1094,10 @@ TLorentzVector HHKinFit2::HHKinFitMasterHeavyHiggs::getFittedBJet2(int mh1, int 
   HHFitHypothesisHeavyHiggs hypo(mh1, mh2);
   return(m_map_fittedB2[hypo]);
 }
+
+void HHKinFit2::HHKinFitMasterHeavyHiggs::setVerbosity(int aVerbosity) {m_verbosity = aVerbosity;}
+
+int HHKinFit2::HHKinFitMasterHeavyHiggs::getVerbosity() const {return m_verbosity;}
 
 void HHKinFit2::HHKinFitMasterHeavyHiggs::setAdvancedBalance(const TLorentzVector* met, 
                                                              TMatrixD met_cov)

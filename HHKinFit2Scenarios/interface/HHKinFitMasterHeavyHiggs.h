@@ -38,7 +38,8 @@ class HHKinFitMasterHeavyHiggs{
                            TVector2 const& met, TMatrixD const& met_cov,
                            double sigmaEbjet1 = -1.0, double sigmaEbjet2 = -1.0,
                            bool istruth=false,
-                           TLorentzVector const& higgsgen=TLorentzVector(0,0,0,0));
+                           TLorentzVector const& higgsgen=TLorentzVector(0,0,0,0),
+                           int verbosity = 1);
   
   //the main action, runs over all hypotheses and performs the fit
   void fit();
@@ -92,6 +93,12 @@ class HHKinFitMasterHeavyHiggs{
   
   double getBJet1Resolution(){return m_sigma_bjet1;};
   double getBJet2Resolution(){return m_sigma_bjet2;};
+
+  // set verbosity level (0 - mute, 1 - print warning)
+  void setVerbosity(int aVerbosity);
+
+  /// get verbosity level
+  int getVerbosity() const;
 
   //DEPRECATED/////////////////////////////////////////////////////////
   //only here for backwards compatibility
@@ -157,6 +164,9 @@ private:
   //For ToyMC Studies
   TMatrixD m_bjet1_COV;
   TMatrixD m_bjet2_COV;
+
+  // Verbosity
+  int m_verbosity;
 };
 }
 #endif
